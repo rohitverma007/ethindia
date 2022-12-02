@@ -23,7 +23,7 @@ const App: React.FC = () => {
           paddingTop: "30vh",
         }}
       >
-        <h1 className={classes.title}>Biconomy SDK Demo</h1>
+        <h1 className={classes.title}>PredictNow</h1>
         <Button
           title="Get Started"
           onClickFunc={connect}

@@ -87,7 +87,7 @@ function App() {
 
   return (
     <div className={classes.root}>
-      <Tabs
+      {/* <Tabs
         orientation="vertical"
         variant="scrollable"
         value={value}
@@ -98,7 +98,7 @@ function App() {
         <Tab label="Onboarding" {...a11yProps(0)} />
         <Tab label="Assets" {...a11yProps(1)} />
         <Tab label="Use Cases" {...a11yProps(2)} />
-      </Tabs>
+      </Tabs> */}
 
       <TabPanel value={value} index={0}>
         <Onboarding setValue={setValue} />

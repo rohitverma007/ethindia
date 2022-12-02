@@ -29,7 +29,7 @@ const Assets: React.FC = () => {
 
   return (
     <main className={classes.main}>
-      <h1 className="title">Biconomy SDK Demo</h1>
+      <h1 className="title">PredictNow</h1>
       {/* <button onClick={getSmartAccountBalanceFunc}>get balance</button> */}
       <div className={classes.container}>
         <div className={classes.element}>
