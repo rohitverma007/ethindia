@@ -6,6 +6,7 @@ const cors = require('cors');
 const { Revise } = require("revise-sdk");
 const AUTH_TOKEN = "REDACT";
 const revise = new Revise({auth: AUTH_TOKEN});
+const axios = require('axios');
 
 const app = express()
 // app.use(cors());
@@ -38,33 +39,52 @@ app.get('/', (req, res) => {
 app.post('/submitBracket', async (req, res) => {
     console.log(req.body)
 
-    
-    
+
+    // TODO uncomment once worldcoin fixes their stuff
+    // axios.post("https://developer.worldcoin.org/api/v1/verify", {
+    //   merkle_root: req.body.merkle_root,
+    //   nullifier_hash: req.body.nullifier_hash,
+    //   action_id: "wid_staging_e4267d5b2bca16a8a301e221270f7da1",
+    //   signal: req.body.signal, // UPDATE TO ETH ADREEESS
+    //   proof: req.body.proof
+    // }).then(async (response) => {
+    //   console.log(response)
+      // if(response.success && response.nullifier_hash){
+        // continue creating nft
     // TODO - get incremental id.
 
-    const tokenId = Math.floor(Math.random() * 1700);
-    // create nft
+    // create nft 
+    const tokenId = Math.floor(Math.random() * 2000);
 
-    const nft = await revise.addNFT(
+      const nft = await revise.addNFT(
         {
           image:
             "https://i.imgur.com/jzdqME4.png",
-          name: "Bracket",
+          name: "2022 Bracket",
           tokenId: tokenId.toString(),
-          description: "Just Submittsing Bracket. round of 16",
+          description: "A predicted bracket for World Cup 2022.",
         },
         req.body.matches,
-        "4e47efa1-4f04-4baf-85a8-b935c37fdf51"
+        "d6af863b-1253-45d1-bc2c-7537bab28754" //TODO - Change according to collection ID created
       );
     
       console.log(nft);
       console.log({'tokenId': tokenId.toString()});
+      res.send({'tokenId': tokenId.toString()})
 
+      // TODO - unocmment once worldcoin is fixed
+      // } else {
+      //   res.send({message: "PLEASE VERIFY WORLD ID"})
+      // }
+
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
+
+    // res.send(400)
     
-    
 
 
-    res.send({'tokenId': tokenId.toString()})
 
 
 

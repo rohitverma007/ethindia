@@ -201,7 +201,7 @@ const App: React.FC = () => {
       <Navbar />
       {loading ? (
         <div className={classes.container}>
-          <img src="/logo.svg" className={classes.animateBlink} alt="" />
+          <img src="/loadinglogo.png" className={classes.animateBlink} alt="" />
         </div>
       ) : (
         <TabsBody />

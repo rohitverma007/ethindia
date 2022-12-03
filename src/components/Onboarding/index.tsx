@@ -7,6 +7,7 @@ import { useWeb3Context } from "../../contexts/Web3Context";
 import { useSmartAccountContext } from "../../contexts/SmartAccountContext";
 import { SingleEliminationBracket, DoubleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
 import axios from "axios";
+import { WorldIDWidget } from '@worldcoin/id'
 
 import {
   getEOAWallet,
@@ -36,6 +37,11 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   const [final1, setFinal1] = useState('');
   const [final2, setFinal2] = useState('');
   const [champion, setChampion] = useState('');
+  const [nftMinted, setNftMinted] = useState(false);
+  const [merkleRoot, setMerkleRoot] = useState('');
+  const [wSignal, setWSignal] = useState('');
+  const [nullifierHash, setNullifierHash] = useState('');
+  const [proof, setProof] = useState('');
 
   const {
     state,
@@ -92,11 +98,6 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   };
 
   const submitBracket = async () => {
-    // const { provider } = useWeb3Context();
-    // console.log("PROVIDEERERE2")
-    // console.log(provider);
-    // // window.yy  = provider;
-    // (window as any).provider = provider;
     const matches = [
       {"netherlands_usa": quarter1},
       {"argentina_australia": quarter2},
@@ -114,32 +115,34 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
       {"semi_2": final2},
       {"final": champion},
      ]
+     setWSignal(smartAccount?.address ? smartAccount?.address : '')
     axios.post("http://localhost:8000/submitBracket", {
       address: smartAccount?.address,
-      matches: matches
+      matches: matches,
+      merkle_root: merkleRoot,
+      signal: wSignal,
+      nullifier_hash: nullifierHash,
+      proof: proof
     }).then(async function (response) {
       console.log(response)
       console.log(response.data.tokenId)
-// reverting to metamask for now???
-// // create provider from Metamask
-// const provider = new ethers.providers.Web3Provider(window.ethereum)
-// // get the account that will pay for the trasaction
-// const signer = provider.getSigner()
-
-// let contract = new ethers.Contract(
-//       contractAddress,
-//       abi,
-//       signer
-//     )
-
-
-// const tx = await contract.mint(1);
-
-// console.log('transaction :>> ', tx)
-// wait for the transaction to actually settle in the blockchain
-// await tx.wait()
+      const tokenId = response.data.tokenId;
+        const erc20Interface = new ethers.utils.Interface([
+          'function mint(address to, uint256 tokenId)'
+        ])
+  
+        const data = erc20Interface.encodeFunctionData(
+          'mint', [smartAccount?.address, tokenId]
+        )
+        const tx1 = {
+          to: "0x5Efbf183afDb18857E1902C5D364FbBE770Fcb6D",//TODO - change according to contract address
+          data
+        }
+        const txResponse = await smartAccount?.sendGasLessTransaction({ transaction: tx1 });
+        console.log(txResponse)
 
     }).catch(function (error) {
+      // worldcoin failure catch
       console.log(error)
     })
   };
@@ -364,6 +367,30 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
        ): (<></>)}
         </div>       
       </div>
+      {nftMinted ? 
+      <>
+        <p>Join a Match Watch Room.</p>
+        <p>Currently Playing:</p>
+        <p>Argentina vs Australia</p>
+
+      </> 
+      : <></>}
+
+
+        {!merkleRoot ? <><WorldIDWidget
+        actionId="wid_staging_e4267d5b2bca16a8a301e221270f7da1" 
+        signal={smartAccount?.address}
+        enableTelemetry
+        onSuccess={(verificationResponse) => {
+          console.log(verificationResponse)
+          
+          setMerkleRoot(verificationResponse.merkle_root)
+          setNullifierHash(verificationResponse.nullifier_hash)
+          setProof(verificationResponse.proof)
+          }
+        } // you'll actually want to pass the proof to the API or your smart contract
+        onError={(error) => console.error(error)}
+      />
       <Button
           title="Submit Bracket"
           onClickFunc={submitBracket}
@@ -375,64 +402,20 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
               "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
           }}
         />
-{/* <SingleEliminationBracket
-      matches={[
-        {
-          "id": 260005,
-          "name": "Fifa World Cup 2022",
-          "nextMatchId": null, // Id for the nextMatch in the bracket, if it's final match it must be null OR undefined
-          "tournamentRoundText": "4", // Text for Round Header
-          "startTime": "2021-05-30",
-          "state": "DONE", // 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | 'DONE' | 'SCORE_DONE' Only needed to decide walkovers and if teamNames are TBD (to be decided)
-          "participants": [
-            {
-              "id": "netherlands", // Unique identifier of any kind
-              "resultText": "", // Any string works
-              "isWinner": false,
-              "status": null, // 'PLAYED' | 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | null
-              "name": "giacomo123"
-            },
-            {
-              "id": "9ea9ce1a-4794-4553-856c-9a3620c0531b",
-              "resultText": null,
-              "isWinner": true,
-              "status": null, // 'PLAYED' | 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY'
-              "name": "Ant"
-            }
-          ]
-        },
-        {
-          "id": 260005,
-          "name": "Fifa World Cup 2022",
-          "nextMatchId": 5, // Id for the nextMatch in the bracket, if it's final match it must be null OR undefined
-          "tournamentRoundText": "4", // Text for Round Header
-          "startTime": "2021-05-30",
-          "state": "DONE", // 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | 'DONE' | 'SCORE_DONE' Only needed to decide walkovers and if teamNames are TBD (to be decided)
-          "participants": [
-            {
-              "id": "c016cb2a-fdd9-4c40-a81f-0cc6bdf4b9cc", // Unique identifier of any kind
-              "resultText": "WON", // Any string works
-              "isWinner": false,
-              "status": null, // 'PLAYED' | 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY' | null
-              "name": "giacomo123"
-            },
-            {
-              "id": "9ea9ce1a-4794-4553-856c-9a3620c0531b",
-              "resultText": null,
-              "isWinner": true,
-              "status": null, // 'PLAYED' | 'NO_SHOW' | 'WALK_OVER' | 'NO_PARTY'
-              "name": "Ant"
-            }
-          ]
-        }        
-      ]}
-      matchComponent={Match}
-      svgWrapper={({ children, ...props }) => (
-        <SVGViewer width={500} height={500} {...props}>
-          {children}
-        </SVGViewer>
-      )}
-    />         */}
+      </> : <></>}
+      {champion && merkleRoot ? <>      
+      <Button
+          title="Submit Bracket"
+          onClickFunc={submitBracket}
+          style={{
+            fontSize: 20,
+            padding: "30px 20px",
+            border: 0,
+            background:
+              "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
+          }}
+        />
+        </> : <></>}
    </main>
   );
 };
