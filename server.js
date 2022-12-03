@@ -40,7 +40,6 @@ app.post('/submitBracket', async (req, res) => {
 
     
     
-
     // TODO - get incremental id.
 
     const tokenId = Math.floor(Math.random() * 1700);
@@ -55,7 +54,7 @@ app.post('/submitBracket', async (req, res) => {
           description: "Just Submittsing Bracket. round of 16",
         },
         req.body.matches,
-        "6024e639-397e-4d5e-8a9a-734cd851fe79"
+        "4e47efa1-4f04-4baf-85a8-b935c37fdf51"
       );
     
       console.log(nft);

@@ -21,6 +21,22 @@ type OnboardingProps = {
 const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   const classes = useStyles();
   const provider = useWeb3Context();
+  const [quarter1, setQuarter1] = useState('');
+  const [quarter2, setQuarter2] = useState('');
+  const [quarter3, setQuarter3] = useState('');
+  const [quarter4, setQuarter4] = useState('');
+  const [quarter5, setQuarter5] = useState('');
+  const [quarter6, setQuarter6] = useState('');
+  const [quarter7, setQuarter7] = useState('');
+  const [quarter8, setQuarter8] = useState('');
+  const [semi1, setSemi1] = useState('');
+  const [semi2, setSemi2] = useState('');
+  const [semi3, setSemi3] = useState('');
+  const [semi4, setSemi4] = useState('');
+  const [final1, setFinal1] = useState('');
+  const [final2, setFinal2] = useState('');
+  const [champion, setChampion] = useState('');
+
   const {
     state,
     wallet: smartAccount,
@@ -81,7 +97,23 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
     // console.log(provider);
     // // window.yy  = provider;
     // (window as any).provider = provider;
-  
+    const matches = [
+      {"netherlands_usa": quarter1},
+      {"argentina_australia": quarter2},
+      {"japan_croatia": quarter3},
+      {"brazil_south_korea": quarter4},
+      {"france_poland": quarter5},
+      {"england_senegal": quarter6},
+      {"morocco_spain": quarter7},
+      {"portugal_switzherland": quarter8},
+      {"quarter_1": semi1},
+      {"quarter_2": semi2},
+      {"quarter_3": semi3},
+      {"quarter_4": semi4},
+      {"semi_1": final1},
+      {"semi_2": final2},
+      {"final": champion},
+     ]
     axios.post("http://localhost:8000/submitBracket", {
       address: smartAccount?.address,
       matches: matches
@@ -153,36 +185,185 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   // const SingleElimination = () => (
    
   // );
-  const matches = [
-    {
-      "netherlands_usa": "netherlands"
-    },
-    {
-      "argentina_australia": "argentina"
-    },
-    {
-      "japan_croatia": "japan"
-    },
-    {
-      "brazil_south_korea": "brazil"
-    },
-    {
-      "france_poland": "france"
-    },
-    {
-      "england_senegal": "england"
-    },
-    {
-      "morocco_spain": "spain"
-    },
-    {
-      "portugal_switzherland": "portugal"
-    }
 
-   ]
+   
+   const handleCssChanges = (event: any) => {
+    console.log(event.target.textContent);
+    console.log(event)
+    // reset first
+    for(let i = 0; i < event.target.parentElement.children.length; i++){
+      event.target.parentElement.children[i].style.color = "#CDF0EA";
+      event.target.parentElement.children[i].style["box-shadow"] = "2px 2px #3e497a"
+    }
+    event.target.style.color = "rgb(48 172 150)";
+    event.target.style["box-shadow"] = "1px 1px 0px #3e497a";
+   }
+   const setQuarter1Info = (event: any) => {
+    handleCssChanges(event);
+      setQuarter1(event.target.textContent);
+
+
+   } 
+
+   const setQuarter2Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter2(event.target.textContent)
+   }
+   const setQuarter3Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter3(event.target.textContent)
+   }
+   const setQuarter4Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter4(event.target.textContent)
+   }
+   const setQuarter5Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter5(event.target.textContent)
+   }
+   const setQuarter6Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter6(event.target.textContent)
+   }
+   const setQuarter7Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter7(event.target.textContent)
+   }
+   const setQuarter8Info = (event: any) => {
+    handleCssChanges(event);
+    setQuarter8(event.target.textContent)
+   }   
+   const setSemi1Info = (event: any) => {
+    handleCssChanges(event);
+    setSemi1(event.target.textContent);
+   }
+   const setSemi2Info = (event: any) => {
+    handleCssChanges(event);
+    setSemi2(event.target.textContent);
+   }
+   const setSemi3Info = (event: any) => {
+    handleCssChanges(event);
+    setSemi3(event.target.textContent);
+   }
+   const setSemi4Info = (event: any) => {
+    handleCssChanges(event);
+    setSemi4(event.target.textContent);
+   }
+   const setFinal1Info = (event: any) => {
+    handleCssChanges(event);
+    setFinal1(event.target.textContent);
+   }
+   const setFinal2Info = (event: any) => {
+    handleCssChanges(event);
+    setFinal2(event.target.textContent);
+   }
+   const setChampionInfo = (event: any) => {
+    handleCssChanges(event);
+    setChampion(event.target.textContent);
+   }                  
   return (
     <main className={classes.main}>
       {smartAccount?.address}
+      <div className="allRounds" style={{'display': 'flex', 'flexDirection': 'row'}}>
+
+      
+      <div className="roundof16" style={{'display': 'flex', 'flexDirection': 'column', 'paddingRight': '20px'}}>
+      <span >
+      <Button onClickFunc={(e: any)=>{setQuarter1Info(e)}} title="Netherlands"></Button>
+      <Button onClickFunc={(e: any)=>{setQuarter1Info(e)}} title="USA"></Button>
+      </span>
+      <p></p>
+      <span>
+      <Button onClickFunc={setQuarter2Info} title="Argentina"></Button>
+      <Button onClickFunc={setQuarter2Info} title="Australia"></Button>
+      </span>
+      <p></p>
+
+      <span>
+      <Button onClickFunc={setQuarter3Info} title="Japan"></Button>
+      <Button onClickFunc={setQuarter3Info} title="Croatia"></Button>
+      </span>
+      <p></p>
+      <Button onClickFunc={setQuarter4Info} title="Brazil"></Button>
+      <Button onClickFunc={setQuarter4Info} title="South Korea"></Button>
+      <p></p>
+      <Button onClickFunc={setQuarter5Info}  title="France"></Button>
+      <Button onClickFunc={setQuarter5Info} title="Poland"></Button>
+      <p></p>
+      <Button onClickFunc={setQuarter6Info} title="England"></Button>
+      <Button onClickFunc={setQuarter6Info} title="Senegal"></Button>
+      <p></p>
+      <Button onClickFunc={setQuarter7Info} title="Morocco"></Button>
+      <Button onClickFunc={setQuarter7Info} title="Spain"></Button>
+      <p></p>
+      <Button onClickFunc={setQuarter8Info} title="Portugal"></Button>
+      <Button onClickFunc={setQuarter8Info} title="Switzerland"></Button>     
+      </div> 
+      <div  style={{'display': 'flex', 'flexDirection': 'column', 'paddingTop': '20px', 'paddingRight': '20px'}}>
+       {quarter1 ? (
+        <span>
+        <Button onClickFunc={setSemi1Info} title={quarter1}></Button>
+      {quarter2 ? <Button onClickFunc={setSemi1Info} title={quarter2}></Button> : <></>}
+      </span>
+       ): (<></>)}
+       
+          
+      
+      <p></p>
+      {quarter3 ? (
+        <span>
+        <Button onClickFunc={setSemi2Info} title={quarter3}></Button>
+      {quarter4 ? <Button onClickFunc={setSemi2Info} title={quarter4}></Button> : <></>}
+      </span>
+       ): (<></>)}
+<p></p>
+      {quarter5 ? (
+        <span>
+        <Button onClickFunc={setSemi3Info} title={quarter5}></Button>
+      {quarter6 ? <Button onClickFunc={setSemi3Info} title={quarter6}></Button> : <></>}
+      </span>
+       ): (<></>)}
+
+       <p></p>
+      {quarter7 ? (
+        <span>
+        <Button onClickFunc={setSemi4Info} title={quarter7}></Button>
+      {quarter8 ? <Button onClickFunc={setSemi4Info} title={quarter8}></Button> : <></>}
+      </span>
+       ): (<></>)}
+
+      </div>
+      <div  style={{'display': 'flex', 'flexDirection': 'column', 'paddingTop': '60px', 'paddingRight': '20px'}}>
+      {semi1 ? (
+        <span>
+        <Button onClickFunc={setFinal1Info} title={semi1}></Button>
+      {semi2 ? <Button onClickFunc={setFinal1Info} title={semi2}></Button> : <></>}
+      </span>
+       ): (<></>)}     
+       <p></p>   
+      {semi3 ? (
+        <span>
+        <Button onClickFunc={setFinal2Info} title={semi3}></Button>
+      {semi4 ? <Button onClickFunc={setFinal2Info} title={semi4}></Button> : <></>}
+      </span>
+       ): (<></>)}               
+        </div>
+        <div  style={{'display': 'flex', 'flexDirection': 'column', 'paddingTop': '80px', 'paddingRight': '20px'}}>
+      {final1 ? (
+        <span>
+        <Button onClickFunc={setChampionInfo} title={final1}></Button>
+      {final2 ? <Button onClickFunc={setChampionInfo} title={final2}></Button> : <></>}
+      </span>
+       ): (<></>)}        
+        </div>   
+        <div  style={{'display': 'flex', 'flexDirection': 'column', 'paddingTop': '100px', 'paddingRight': '20px'}}>
+      {champion ? (
+        <span>
+        {champion}
+      </span>
+       ): (<></>)}
+        </div>       
+      </div>
       <Button
           title="Submit Bracket"
           onClickFunc={submitBracket}
