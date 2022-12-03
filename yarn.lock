@@ -1884,6 +1884,10 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
+"@g-loot/react-tournament-brackets@g-loot/react-tournament-brackets":
+  version "1.0.0"
+  resolved "https://codeload.github.com/g-loot/react-tournament-brackets/tar.gz/0707bead6a914e4ff622b8342d62f73cbcd2e40a"
+
 "@gnosis.pm/safe-core-sdk-types@^1.4.0", "@gnosis.pm/safe-core-sdk-types@^1.6.1":
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/@gnosis.pm/safe-core-sdk-types/-/safe-core-sdk-types-1.6.1.tgz#dcd0c19d61fb5266b6e40bac1cd91fde44eda1d7"
