@@ -1,11 +1,12 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-// import { ethers } from "ethers";
+import { ethers } from "ethers";
 import { makeStyles } from "@material-ui/core/styles";
 import { LocalRelayer, RestRelayer } from "@biconomy/relayer";
 import Button from "../Button";
-// import { useWeb3Context } from "../../contexts/Web3Context";
+import { useWeb3Context } from "../../contexts/Web3Context";
 import { useSmartAccountContext } from "../../contexts/SmartAccountContext";
 import { SingleEliminationBracket, DoubleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
+import axios from "axios";
 
 import {
   getEOAWallet,
@@ -19,12 +20,16 @@ type OnboardingProps = {
 
 const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   const classes = useStyles();
-  // const { provider } = useWeb3Context();
+  const provider = useWeb3Context();
   const {
     state,
     wallet: smartAccount,
     getSmartAccount,
   } = useSmartAccountContext();
+  console.log("PROVIDEERERE")
+  console.log(provider);
+  // window.yy  = provider;
+  (window as any).provider = provider;
 
   const [deployLoading1, setDeployLoading1] = useState(false);
   const [deployLoading2, setDeployLoading2] = useState(false);
@@ -70,6 +75,43 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
     }
   };
 
+  const submitBracket = async () => {
+    // const { provider } = useWeb3Context();
+    // console.log("PROVIDEERERE2")
+    // console.log(provider);
+    // // window.yy  = provider;
+    // (window as any).provider = provider;
+  
+    axios.post("http://localhost:8000/submitBracket", {
+      address: smartAccount?.address,
+      matches: matches
+    }).then(async function (response) {
+      console.log(response)
+      console.log(response.data.tokenId)
+// reverting to metamask for now???
+// // create provider from Metamask
+// const provider = new ethers.providers.Web3Provider(window.ethereum)
+// // get the account that will pay for the trasaction
+// const signer = provider.getSigner()
+
+// let contract = new ethers.Contract(
+//       contractAddress,
+//       abi,
+//       signer
+//     )
+
+
+// const tx = await contract.mint(1);
+
+// console.log('transaction :>> ', tx)
+// wait for the transaction to actually settle in the blockchain
+// await tx.wait()
+
+    }).catch(function (error) {
+      console.log(error)
+    })
+  };
+
   const deploySmartAccount2 = async () => {
     try {
       if (!smartAccount || !state) {
@@ -111,10 +153,48 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   // const SingleElimination = () => (
    
   // );
+  const matches = [
+    {
+      "netherlands_usa": "netherlands"
+    },
+    {
+      "argentina_australia": "argentina"
+    },
+    {
+      "japan_croatia": "japan"
+    },
+    {
+      "brazil_south_korea": "brazil"
+    },
+    {
+      "france_poland": "france"
+    },
+    {
+      "england_senegal": "england"
+    },
+    {
+      "morocco_spain": "spain"
+    },
+    {
+      "portugal_switzherland": "portugal"
+    }
 
+   ]
   return (
     <main className={classes.main}>
-<SingleEliminationBracket
+      {smartAccount?.address}
+      <Button
+          title="Submit Bracket"
+          onClickFunc={submitBracket}
+          style={{
+            fontSize: 20,
+            padding: "30px 20px",
+            border: 0,
+            background:
+              "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
+          }}
+        />
+{/* <SingleEliminationBracket
       matches={[
         {
           "id": 260005,
@@ -171,7 +251,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
           {children}
         </SVGViewer>
       )}
-    />        
+    />         */}
    </main>
   );
 };

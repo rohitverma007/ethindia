@@ -15,8 +15,8 @@ import {
 export const ChainId = {
   MAINNET: 1, // Ethereum
   GOERLI: 5,
-  POLYGON_MUMBAI: 80001,
-  POLYGON_MAINNET: 137,
+  // POLYGON_MUMBAI: 80001,
+  // POLYGON_MAINNET: 137,
 };
 
 // Types
@@ -100,14 +100,14 @@ export const SmartAccountProvider = ({ children }: any) => {
         // bundlerUrl: 'http://localhost:3005/rpc',
         networkConfig: [
           {
-          chainId: ChainId.POLYGON_MUMBAI,
-          dappAPIKey: '59fRCMXvk.8a1652f0-b522-4ea7-b296-98628499aee3',
+          chainId: ChainId.GOERLI,
+          // dappAPIKey: '59fRCMXvk.8a1652f0-b522-4ea7-b296-98628499aee3',
           // if need to override // providerUrl: 
         },
-        {
-          chainId: ChainId.POLYGON_MAINNET,
+        // {
+          // chainId: ChainId.POLYGON_MAINNET,
           // dappAPIKey: todo
-        }
+        // }
       ]
       });
       console.log("wallet", wallet);

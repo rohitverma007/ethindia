@@ -12,72 +12,46 @@ import { SingleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tourna
 // THEN CREATE NFTS
 // DO FRONTEND LSAT
 
-const correct_matches = [
-  {
-    "netherlands_usa": "netherlands"
-  },
-  {
-    "argentina_australia": null
-  },
-  {
-    "japan_croatia": null
-  },
-  {
-    "brazil_south_korea": null
-  },
-  {
-    "france_poland": null
-  },
-  {
-    "england_senegal": null
-  },
-  {
-    "morocco_spain": null
-  },
-  {
-    "portugal_switzherland": null
-  }
+// const correct_matches = [
+//   {
+//     "netherlands_usa": "netherlands"
+//   },
+//   {
+//     "argentina_australia": null
+//   },
+//   {
+//     "japan_croatia": null
+//   },
+//   {
+//     "brazil_south_korea": null
+//   },
+//   {
+//     "france_poland": null
+//   },
+//   {
+//     "england_senegal": null
+//   },
+//   {
+//     "morocco_spain": null
+//   },
+//   {
+//     "portugal_switzherland": null
+//   }
 
-]
-for(const ob of correct_matches) {
-  for(const a in ob){
-    if(ob[a] != null){
-      if(ob[a] == user[a]){
-        return {
-          // NEW NFT
-        }
-      }
-    }
-  }
-}
+// ]
+// for(const ob of correct_matches) {
+//   for(const a in ob){
+//     if(ob[a] != null){
+//       if(ob[a] == user[a]){
+//         return {
+//           // NEW NFT
+//         }
+//       }
+//     }
+//   }
+// }
 
-const matches = [
-    {
-      "netherlands_usa": "netherlands"
-    },
-    {
-      "argentina_australia": "argentina"
-    },
-    {
-      "japan_croatia": "japan"
-    },
-    {
-      "brazil_south_korea": "brazil"
-    },
-    {
-      "france_poland": "france"
-    },
-    {
-      "england_senegal": "england"
-    },
-    {
-      "morocco_spain": "spain"
-    },
-    {
-      "portugal_switzherland": "portugal"
-    }
 
-   ]
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -101,7 +75,7 @@ const App: React.FC = () => {
         }}
       >
         <h1 className={classes.title}>PredictNow</h1>
-        <SingleEliminationBracket
+        {/* <SingleEliminationBracket
 
       matches={[
         {
@@ -204,7 +178,7 @@ const App: React.FC = () => {
           {children}
         </SVGViewer>
       )}
-    />              
+    />               */}
         <Button
           title="Get Started"
           onClickFunc={connect}
