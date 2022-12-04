@@ -42,19 +42,22 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   const [wSignal, setWSignal] = useState('');
   const [nullifierHash, setNullifierHash] = useState('');
   const [proof, setProof] = useState('');
-
+  // const contractAddress = "0x5Efbf183afDb18857E1902C5D364FbBE770Fcb6D"; //old
+  // const contractAddress = "0x6C7937cFBE120f354eF5a3Df6117585A957c4162"; //latest
+  // const contractAddress = "0xF34eD67273377065Dc941fa3dEBaC90FE76947A8" //actual latest
+  const contractAddress = "0xeBed36b4671B9a760E15BFbCD92d2F7a72ef3f6B" //actual actual latest
+  
   const {
     state,
     wallet: smartAccount,
     getSmartAccount,
   } = useSmartAccountContext();
-  console.log("PROVIDEERERE")
-  console.log(provider);
-  // window.yy  = provider;
   (window as any).provider = provider;
 
+  const [tokenId, setTokenId] = useState(0)
   const [deployLoading1, setDeployLoading1] = useState(false);
   const [deployLoading2, setDeployLoading2] = useState(false);
+  const [mintLoading, setMintLoading] = useState(false);
 
   const deploySmartAccount1 = async () => {
     try {
@@ -98,6 +101,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   };
 
   const submitBracket = async () => {
+    setMintLoading(true)
     const matches = [
       {"netherlands_usa": quarter1},
       {"argentina_australia": quarter2},
@@ -116,7 +120,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
       {"final": champion},
      ]
      setWSignal(smartAccount?.address ? smartAccount?.address : '')
-    axios.post("http://localhost:8000/submitBracket", {
+    axios.post("https://predictnow.ngrok.io/submitBracket", {
       address: smartAccount?.address,
       matches: matches,
       merkle_root: merkleRoot,
@@ -124,23 +128,31 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
       nullifier_hash: nullifierHash,
       proof: proof
     }).then(async function (response) {
+      showSuccessMessage("Minting your NFT... mmm...");
       console.log(response)
       console.log(response.data.tokenId)
       const tokenId = response.data.tokenId;
+      setTokenId(tokenId);
         const erc20Interface = new ethers.utils.Interface([
           'function mint(address to, uint256 tokenId)'
         ])
-  
+        let toAddress = smartAccount?.address;
+        if (!smartAccount?.provider?.connection?.url?.includes('eip-1193')){
+          toAddress = smartAccount?.owner;
+        }
+        console.log(toAddress)
+        // TODO - change for social potentially
         const data = erc20Interface.encodeFunctionData(
           'mint', [smartAccount?.address, tokenId]
         )
         const tx1 = {
-          to: "0x5Efbf183afDb18857E1902C5D364FbBE770Fcb6D",//TODO - change according to contract address
+          to: contractAddress,
           data
         }
         const txResponse = await smartAccount?.sendGasLessTransaction({ transaction: tx1 });
         console.log(txResponse)
-
+        setMintLoading(false)
+        setNftMinted(true)
     }).catch(function (error) {
       // worldcoin failure catch
       console.log(error)
@@ -266,7 +278,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
    }                  
   return (
     <main className={classes.main}>
-      {smartAccount?.address}
+      <h1>FIFA World Cup 2022 - Prediction Bracket.</h1>
       <div className="allRounds" style={{'display': 'flex', 'flexDirection': 'row'}}>
 
       
@@ -361,21 +373,31 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
         </div>   
         <div  style={{'display': 'flex', 'flexDirection': 'column', 'paddingTop': '100px', 'paddingRight': '20px'}}>
       {champion ? (
+        <>
         <span>
         {champion}
       </span>
+      <p></p>
+      <Button
+          title="Submit Bracket"
+          onClickFunc={submitBracket}
+          isLoading={mintLoading}
+          style={{
+            fontSize: 16,
+            padding: "20px 10px",
+            border: 0,
+            background:
+              "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
+          }}
+        />
+        {nftMinted ? 
+        <a style={{'color': 'white'}} href={`https://testnets.opensea.io/assets/goerli/${contractAddress}/${tokenId}`} target="_blank">Click to see NFT</a>
+      :<></>}
+        </>
        ): (<></>)}
         </div>       
       </div>
-      {nftMinted ? 
-      <>
-        <p>Join a Match Watch Room.</p>
-        <p>Currently Playing:</p>
-        <p>Argentina vs Australia</p>
-
-      </> 
-      : <></>}
-
+      
 
         {!merkleRoot ? <><WorldIDWidget
         actionId="wid_staging_e4267d5b2bca16a8a301e221270f7da1" 
@@ -391,22 +413,14 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
         } // you'll actually want to pass the proof to the API or your smart contract
         onError={(error) => console.error(error)}
       />
-      <Button
-          title="Submit Bracket"
-          onClickFunc={submitBracket}
-          style={{
-            fontSize: 20,
-            padding: "30px 20px",
-            border: 0,
-            background:
-              "linear-gradient(90deg, #0063FF -2.21%, #9100FF 89.35%)",
-          }}
-        />
+      {/* This happens when merkelroot isnt hterelooool */}
+      
       </> : <></>}
       {champion && merkleRoot ? <>      
       <Button
           title="Submit Bracket"
           onClickFunc={submitBracket}
+          isLoading={mintLoading}
           style={{
             fontSize: 20,
             padding: "30px 20px",

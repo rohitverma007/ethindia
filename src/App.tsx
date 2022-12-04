@@ -74,7 +74,7 @@ const App: React.FC = () => {
           paddingTop: "30vh",
         }}
       >
-        <h1 className={classes.title}>PredictNow</h1>
+        <h1 className={classes.title}><img src="/logo.png" alt="" /></h1>
         {/* <SingleEliminationBracket
 
       matches={[
