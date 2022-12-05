@@ -46,7 +46,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
   // const contractAddress = "0x6C7937cFBE120f354eF5a3Df6117585A957c4162"; //latest
   // const contractAddress = "0xF34eD67273377065Dc941fa3dEBaC90FE76947A8" //actual latest
   const contractAddress = "0xeBed36b4671B9a760E15BFbCD92d2F7a72ef3f6B" //actual actual latest
-  
+
   const {
     state,
     wallet: smartAccount,
@@ -143,7 +143,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ setValue }) => {
         console.log(toAddress)
         // TODO - change for social potentially
         const data = erc20Interface.encodeFunctionData(
-          'mint', [smartAccount?.address, tokenId]
+          'mint', [toAddress, tokenId]
         )
         const tx1 = {
           to: contractAddress,
